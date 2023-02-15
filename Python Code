@@ -1,0 +1,23 @@
+import requests
+import urllib.parse
+import pyttsx3
+
+def translate_to_high_valyrian(text):
+    text = urllib.parse.quote(text)
+    url = f'https://translate.google.com/translate_a/single?client=gtx&sl=en&tl=hy&dt=t&q={text}'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    response = requests.get(url, headers=headers)
+    result = response.json()
+    translation = result[0][0][0]
+    pronunciation = result[0][1][3]
+    return translation, pronunciation
+
+if __name__ == '__main__':
+    text = input('Enter English text to translate: ')
+    translation, pronunciation = translate_to_high_valyrian(text)
+    print(f'Translated text: {translation}')
+    print(f'Pronunciation: {pronunciation}')
+    engine = pyttsx3.init()
+    engine.say(pronunciation)
+    engine.runAndWait()
